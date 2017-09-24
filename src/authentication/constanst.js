@@ -9,4 +9,4 @@ const authorizationMethod = {
     response: 'response'
 }
 
-export { accessRoles, authorizationMethod };
+module.exports = { accessRoles, authorizationMethod };

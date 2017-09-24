@@ -1,6 +1,6 @@
-import Request from './request/request';
-import TokenIssuer from './authentication/tokenissuer';
-import Authorization from './authentication/authorization';
+const Request = require('./request/request');
+const TokenIssuer = require('./authentication/tokenissuer');
+const Authorization = require('./authentication/authorization');
 
 exports.Request = Request;
 exports.Authorization = Authorization;

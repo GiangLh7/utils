@@ -1,5 +1,5 @@
 const jsonWebToken = require('jsonwebtoken');
-import { accessRoles } from  './constanst'
+const accessRoles = require('./constanst').accessRoles;
 
 class TokenIssuer {
     constructor(tokenSecret) {

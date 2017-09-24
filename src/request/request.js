@@ -1,33 +1,30 @@
-import TokenIssuer from '../authentication/tokenissuer';
+const TokenIssuer = require('../authentication/tokenissuer');
 const request = require('request');
 
-class Request {
-
-    constructor(hostName, tokenSecret) {
-        this._hostName = hostName;
-        if(tokenSecret) {
-            this._tokenSecret = tokenSecret;
-            this._tokenIssuer = new TokenIssuer(this._tokenSecret);
-        }
+function Request(hostName, tokenSecret) {
+    this._hostName = hostName;
+    if(tokenSecret) {
+        this._tokenSecret = tokenSecret;
+        this._tokenIssuer = new TokenIssuer(this._tokenSecret);
     }
 
-    get(resource) {
+    this.get = function(resource) {
         return this._send('get', resource);
     }
 
-    post(resource, payload) {
+    this.post = function(resource, payload) {
         return this._send('post', resource, payload);
     }
 
-    patch(resource, payload) {
+    this.patch = function(resource, payload) {
         return this._send('patch', resource, payload);
     }
 
-    delete(resource, payload) {
+    this.delete = function(resource, payload) {
         return this._send('delete', resource, payload);
     }
 
-    _send(method, resource, payload) {
+    this._send = function(method, resource, payload) {
         let options = {};
         if (this._tokenSecret) {
             options = this._tokenIssuer.getRequestHeader();
@@ -45,8 +42,8 @@ class Request {
                 }
                 resolve(response.body);
             })
-        })
+        });
     }
 }
 
-export default Request;
+module.exports = Request;

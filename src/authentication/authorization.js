@@ -1,20 +1,18 @@
-import { authorizationMethod, accessRoles } from './constanst';
-import TokenIssuer from './tokenissuer';
+const authorizationMethod = require('./constanst').authorizationMethod;
+const accessRoles = require('./constanst').accessRoles;
+const TokenIssuer = require('./tokenissuer');
 
-class Authorization {
-    _unauthorizedError = { code: 401, message: 'Unauthorized access to the resource!' };
-
-    constructor(tokenSecret) {
-        this._tokenSecret = tokenSecret;
-        this._tokenIssuer = new TokenIssuer(tokenSecret);
-        this.authStrategy = {
-            key: this._tokenSecret,
-            verifyOptions: { algorithms: ['HS256'] },
-            validateFunc: this.validateToken
-        }
+function Authorization(tokenSecret) {
+    this._unauthorizedError = { code: 401, message: 'Unauthorized access to the resource!' };
+    this._tokenSecret = tokenSecret;
+    this._tokenIssuer = new TokenIssuer(tokenSecret);
+    this.authStrategy = {
+        key: this._tokenSecret,
+        verifyOptions: { algorithms: ['HS256'] },
+        validateFunc: this.validateToken
     }
 
-    validateToken(request, decodedToken, callback) {
+    this.validateToken = function(request, decodedToken, callback) {
         if (this._isSuperUserCredential(decodedToken)) {
             return callback(null, true, decodedToken);
         }
@@ -24,7 +22,7 @@ class Authorization {
         }
     }
 
-    superUserAuthorization(payload, credentials, params) {
+    this.superUserAuthorization = function(payload, credentials, params) {
         const token = payload && payload.token ? payload.token : params.token;
         try {
             const decodedToken = this._tokenIssuer.decodeToken(token);
@@ -38,7 +36,7 @@ class Authorization {
         }
     }
 
-    requestValidation(request, reply) {
+    this.requestValidation = function(request, reply) {
         const credentials = request.auth.credentials;
         if (this._isSuperUserCredential(credentials)) {
             return reply.continue();
@@ -55,7 +53,7 @@ class Authorization {
         })
     }
 
-    responeValidation(request, reply) {
+    this.responeValidation = function(request, reply) {
         const credentials = request.auth.credentials;
         if (this._isSuperUserCredential(credentials)) {
             return reply.continue();
@@ -73,11 +71,11 @@ class Authorization {
         });
     }
 
-    _isSuperUserCredential(credentials) {
+    this._isSuperUserCredential = function(credentials) {
         return credentials && credentials.role === accessRoles.superUser && credentials.userId === accessRoles.superUser;
     }
 
-    _getRouteValidationFunc(routeAuthorizationSetting, validationMethod) {
+    this._getRouteValidationFunc = function(routeAuthorizationSetting, validationMethod) {
         if (!routeAuthorizationSetting) {
             return null;
         }
@@ -93,4 +91,4 @@ class Authorization {
     }
 }
 
-export default Authorization;
+module.exports = Authorization;
