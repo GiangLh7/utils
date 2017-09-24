@@ -39,4 +39,4 @@ class TokenIssuer {
     }
 }
 
-export default TokenIssuer;
+module.exports = TokenIssuer;
