@@ -2,9 +2,8 @@ const jsonWebToken = require('jsonwebtoken');
 const accessRoles = require('./constanst').accessRoles;
 
 function TokenIssuer(tokenSecret) {
-        this._cachedTokens = {};
-        this._tokenSecret = tokenSecret;
-    }
+    this._cachedTokens = {};
+    this._tokenSecret = tokenSecret;
 
     this.issueToken = (userId, role) => {
         userId = userId || accessRoles.superUser;
