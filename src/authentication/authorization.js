@@ -12,7 +12,7 @@ function Authorization(tokenSecret) {
         validateFunc: this.validateToken
     }
 
-    this.validateToken = function(request, decodedToken, callback) {
+    this.validateToken = (request, decodedToken, callback) => {
         if (this._isSuperUserCredential(decodedToken)) {
             return callback(null, true, decodedToken);
         }
@@ -22,7 +22,7 @@ function Authorization(tokenSecret) {
         }
     }
 
-    this.superUserAuthorization = function(payload, credentials, params) {
+    this.superUserAuthorization = (payload, credentials, params) => {
         const token = payload && payload.token ? payload.token : params.token;
         try {
             const decodedToken = this._tokenIssuer.decodeToken(token);
@@ -36,7 +36,7 @@ function Authorization(tokenSecret) {
         }
     }
 
-    this.requestValidation = function(request, reply) {
+    this.requestValidation = (request, reply) => {
         const credentials = request.auth.credentials;
         if (this._isSuperUserCredential(credentials)) {
             return reply.continue();
@@ -53,7 +53,7 @@ function Authorization(tokenSecret) {
         })
     }
 
-    this.responeValidation = function(request, reply) {
+    this.responeValidation = (request, reply) => {
         const credentials = request.auth.credentials;
         if (this._isSuperUserCredential(credentials)) {
             return reply.continue();
@@ -71,11 +71,11 @@ function Authorization(tokenSecret) {
         });
     }
 
-    this._isSuperUserCredential = function(credentials) {
+    this._isSuperUserCredential = (credentials) => {
         return credentials && credentials.role === accessRoles.superUser && credentials.userId === accessRoles.superUser;
     }
 
-    this._getRouteValidationFunc = function(routeAuthorizationSetting, validationMethod) {
+    this._getRouteValidationFunc = (routeAuthorizationSetting, validationMethod) => {
         if (!routeAuthorizationSetting) {
             return null;
         }

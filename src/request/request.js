@@ -8,23 +8,23 @@ function Request(hostName, tokenSecret) {
         this._tokenIssuer = new TokenIssuer(this._tokenSecret);
     }
 
-    this.get = function(resource) {
+    this.get = (resource) => {
         return this._send('get', resource);
     }
 
-    this.post = function(resource, payload) {
+    this.post = (resource, payload) => {
         return this._send('post', resource, payload);
     }
 
-    this.patch = function(resource, payload) {
+    this.patch = (resource, payload) => {
         return this._send('patch', resource, payload);
     }
 
-    this.delete = function(resource, payload) {
+    this.delete = (resource, payload) => {
         return this._send('delete', resource, payload);
     }
 
-    this._send = function(method, resource, payload) {
+    this._send = (method, resource, payload) => {
         let options = {};
         if (this._tokenSecret) {
             options = this._tokenIssuer.getRequestHeader();

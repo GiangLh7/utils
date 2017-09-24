@@ -1,13 +1,12 @@
 const jsonWebToken = require('jsonwebtoken');
 const accessRoles = require('./constanst').accessRoles;
 
-class TokenIssuer {
-    constructor(tokenSecret) {
+function TokenIssuer(tokenSecret) {
         this._cachedTokens = {};
         this._tokenSecret = tokenSecret;
     }
 
-    issueToken(userId, role) {
+    this.issueToken = (userId, role) => {
         userId = userId || accessRoles.superUser;
         role = role || accessRoles.superUser;
         let cachedToken = this._cachedTokens[userId];
@@ -22,11 +21,11 @@ class TokenIssuer {
         return cachedToken;
     }
 
-    decodeToken(token) {
+    this.decodeToken = (token) => {
         return jsonWebToken.verify(token, this._tokenSecret);
     }
 
-    getRequestHeader(userId) {
+    this.getRequestHeader = (userId) => {
         const token = this.issueToken(userId);
         const headerOption = {
             json: true,
