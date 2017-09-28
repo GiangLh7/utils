@@ -6,11 +6,12 @@ function Authorization(tokenSecret) {
     this._unauthorizedError = { code: 401, message: 'Unauthorized access to the resource!' };
     this._tokenSecret = tokenSecret;
     this._tokenIssuer = new TokenIssuer(tokenSecret);
+
     this.authStrategy = {
         key: this._tokenSecret,
         verifyOptions: { algorithms: ['HS256'] },
         validateFunc: this.validateToken
-    }
+    };
 
     this.validateToken = (request, decodedToken, callback) => {
         if (this._isSuperUserCredential(decodedToken)) {
@@ -20,7 +21,7 @@ function Authorization(tokenSecret) {
         if (!allowRoles.includes(decodedToken.role)) {
             callback(null, false, decodedToken);
         }
-    }
+    };
 
     this.superUserAuthorization = (payload, credentials, params) => {
         const token = payload && payload.token ? payload.token : params.token;
@@ -50,7 +51,7 @@ function Authorization(tokenSecret) {
             reply.continue();
         }, () => {
             reply.message(this._unauthorizedError).code(this._unauthorizedError.code);
-        })
+        });
     }
 
     this.responeValidation = (request, reply) => {
