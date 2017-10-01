@@ -24,6 +24,23 @@ function TokenIssuer(tokenSecret) {
         return jsonWebToken.verify(token, this._tokenSecret);
     }
 
+    this.generateToken = (encodingData, encodingSecret, expirationTime) => {
+        return (expirationTime)? jsonWebToken.sign(encodingData, encodingSecret, {expiresIn: expirationTime}) :
+            jsonWebToken.sign(encodingData, encodingSecret);
+    }
+
+    this.verifyIdToken = (token, encodingSecret, ignoreExpiration) => {
+        let decoded = '';
+        try {
+            decoded = ignoreExpiration ?
+                jsonWebToken.verify(token, encodingSecret, { ignoreExpiration: true }) :
+                jsonWebToken.verify(token, encodingSecret);
+        } catch (err) {
+            decoded = '';
+        }
+        return decoded;
+    }
+
     this.getRequestHeader = (userId) => {
         const token = this.issueToken(userId);
         const headerOption = {
